@@ -1,0 +1,6 @@
+pip install torchcodec
+pip install datasets
+pip install sounddevice
+pip install tokenizers
+apt-get install -y portaudio19-dev
+pip install pyaudio

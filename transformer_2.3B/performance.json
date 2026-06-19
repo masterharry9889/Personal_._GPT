@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-06-19T22:06:30.963871",
+  "device": "cpu",
+  "tokenizer": "SimpleCharTokenizer",
+  "num_tokens": 5808930,
+  "num_train_samples": 2000,
+  "num_batches": 1000,
+  "total_parameters": 280320,
+  "epochs": 1,
+  "total_train_time_sec": 8.61,
+  "config": {
+    "vocab_size": 102,
+    "block_size": 128,
+    "batch_size": 2,
+    "n_layers": 1,
+    "dim": 128,
+    "n_heads": 4,
+    "kv_heads": 1,
+    "dim_ff": 512,
+    "max_seq_len": 256
+  },
+  "num_val_tokens": 537160,
+  "num_val_samples": 500,
+  "final_loss": 2.388585,
+  "final_perplexity": 10.8981,
+  "final_val_loss": 2.590363,
+  "final_val_perplexity": 13.3346,
+  "epochs_detail": [
+    {
+      "epoch": 1,
+      "avg_loss": 2.388585,
+      "perplexity": 10.8981,
+      "val_loss": 2.590363,
+      "val_perplexity": 13.3346,
+      "epoch_time_sec": 8.02
+    }
+  ]
+}

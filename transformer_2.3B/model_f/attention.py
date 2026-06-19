@@ -9,7 +9,7 @@ class MultiQueryAttention(nn.Module):
 
         self.q_proj = nn.Linear(dim, dim, bias=False)
         self.k_proj = nn.Linear(dim, dim // config.n_heads * config.kv_heads, bias=False)
-        self.v_proj = nn.Linear(dim, dim // config.n_head * config.kv_heads, bias=False)
+        self.v_proj = nn.Linear(dim, dim // config.n_heads * config.kv_heads, bias=False)
 
         self.o_proj = nn.Linear(dim, dim, bias=False)
 
@@ -17,7 +17,7 @@ class MultiQueryAttention(nn.Module):
         self.kv_heads = config.kv_heads
         self.head_dim = dim // config.n_heads
 
-    def forword(self, x, rope_sin, rope_cos, mask=None):
+    def forward(self, x, rope_sin, rope_cos, mask=None):
         B, T, C = x.shape
 
         q = self.q_proj(x).view(B, T, self.n_heads, self.head_dim)
@@ -44,4 +44,4 @@ class MultiQueryAttention(nn.Module):
         out = att @ v
 
         out = out.transpose(1, 2).reshape(B, T, C)
-        return self.o_proj
+        return self.o_proj(out)

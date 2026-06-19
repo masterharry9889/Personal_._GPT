@@ -1,4 +1,3 @@
-from turtle import forward
 import torch.nn as nn
 from model_f.rmsmorm import RMSNorm
 from model_f.attention import MultiQueryAttention
@@ -12,11 +11,11 @@ class TransformerBlock(nn.Module):
         self.mlp = SwiGLU(config)
         self.parallel = config.parallel_residual
 
-    def foeword(self, x, rope_sin, rope_cos, mask=None):
+    def forward(self, x, rope_sin, rope_cos, mask=None):
         if self.parallel:
             norm = self.norm(x)
             return x + self.attn(norm, rope_sin, rope_cos, mask) + self.mlp(norm)
-        else :
+        else:
             x = x + self.attn(self.norm(x), rope_sin, rope_cos, mask)
             x = x + self.mlp(self.norm(x))
             return x

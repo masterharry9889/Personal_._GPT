@@ -1,15 +1,26 @@
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 import torch
-from tokenizer import Tokenizer
+from tokenizers import Tokenizer
+import torch.nn.functional as F
 from model_f.model import Model
 from model_f.config import Config
 
-# Load model and Tokenizer
-model = Model(Config)
-model.load_state_dict(torch.load("model.pth"))
-model.eval()
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+root = os.path.dirname(os.path.dirname(__file__))
+model_path = os.path.join(root, 'model.pth')
 
-tokenizer = Tokenizer.from_file("jarvis_tokenizer.json")
+def load_model():
+    config = Config()
+    model = Model(config)
+    model.load_state_dict(torch.load(model_path, map_location='cpu'))
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model.to(device)
+    model.eval()
+    return model, device
+
+model, device = load_model()
+tokenizer = Tokenizer.from_file(os.path.join(root, 'tokenizer', 'jarvis_tokenizer.json'))
 
 def generate(prompt, max_len=100, temperature=0.8):
     tokens = tokenizer.encode(prompt).ids
@@ -23,4 +34,5 @@ def generate(prompt, max_len=100, temperature=0.8):
         x = torch.cat((x, next_token), dim=1)
     return tokenizer.decode(x[0].tolist())
 
-print(generate("Hello, how are you?"))
+if __name__ == '__main__':
+    print(generate('Hello, how are you?'))

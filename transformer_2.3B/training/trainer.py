@@ -10,7 +10,7 @@ class Trainer:
 
     def train_epoch(self, dataloader, total_steps, epoch, scheduler=None):
         self.model.train()
-        runting_loass = 0
+        running_loss = 0.0
         for step, (x, y) in enumerate(tqdm(dataloader)):
             x = x.to(self.device)
             y = y.to(self.device)
@@ -27,4 +27,18 @@ class Trainer:
 
             running_loss += loss.item()
 
-        return running_loss / len(dataloader)
+        return running_loss / max(1, len(dataloader))
+
+    @torch.no_grad()
+    def evaluate(self, dataloader):
+        self.model.eval()
+        running_loss = 0.0
+        for x, y in tqdm(dataloader, desc='eval'):
+            x = x.to(self.device)
+            y = y.to(self.device)
+
+            logits = self.model(x)
+            loss = F.cross_entropy(logits.view(-1, logits.size(-1)), y.view(-1))
+            running_loss += loss.item()
+
+        return running_loss / max(1, len(dataloader))
